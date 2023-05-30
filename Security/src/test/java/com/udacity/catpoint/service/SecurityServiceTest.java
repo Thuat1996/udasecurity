@@ -1,24 +1,28 @@
 package com.udacity.catpoint.service;
 
 import com.udacity.catpoint.data.*;
+import com.udacity.catpoint.image.service.FakeImageService;
 import org.junit.jupiter.params.ParameterizedTest;
 import com.udacity.catpoint.image.interfaces.ImageService;
-import com.udacity.catpoint.image.service.FakeImageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.awt.image.BufferedImage;
+
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SecurityServiceTest {
 
     @Mock
-    private ImageService imageServiceTest;
+    private FakeImageService imageServiceTest;
 
     @Mock
     private SecurityRepository securityRepository;
@@ -132,7 +136,7 @@ public class SecurityServiceTest {
     //#10. If the system is armed, reset all sensors to inactive.
     @DisplayName("Tests Requirement #10")
     public void systemArmed_resetAllSensorsInactive() {
-        securityRepository.setArmingStatus(ArmingStatus.ARMED);
+       // securityRepository.setArmingStatus(ArmingStatus.ARMED);
         
     }
 }
