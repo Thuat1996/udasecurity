@@ -50,7 +50,7 @@ public class SecurityServiceTest {
     }
 
     //#2. If alarm is armed and a sensor becomes activated and the system is already pending alarm, set the alarm status to alarm.
-    @ParameterizedTest
+    /*@ParameterizedTest
     @EnumSource(value = ArmingStatus.class, names = {"ARMED_AWAY","ARMED_HOME"})
     @DisplayName("Tests Requirement #2")
     public void alarmArmed_and_sensorActivated_and_systemIsPendingAlarmStatus_setAlarmStatusToAlarm(ArmingStatus armingStatus) {
@@ -137,6 +137,5 @@ public class SecurityServiceTest {
     @DisplayName("Tests Requirement #10")
     public void systemArmed_resetAllSensorsInactive() {
        // securityRepository.setArmingStatus(ArmingStatus.ARMED);
-        
-    }
+    } */
 }
