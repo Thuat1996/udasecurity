@@ -10,4 +10,5 @@ module com.udacity.catpoint {
     requires software.amazon.awssdk.regions;
     requires software.amazon.awssdk.core;
     opens com.udacity.catpoint.data to com.google.gson;
+    opens com.udacity.catpoint.service;
 }

@@ -2,6 +2,7 @@ package com.udacity.catpoint.service;
 
 import com.udacity.catpoint.data.*;
 import com.udacity.catpoint.image.service.FakeImageService;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import com.udacity.catpoint.image.interfaces.ImageService;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +27,6 @@ public class SecurityServiceTest {
 
     @Mock
     private SecurityRepository securityRepository;
-
     private SecurityService securityService;
     Sensor sensor_door = new Sensor("Door", SensorType.DOOR);
     BufferedImage img = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
@@ -50,7 +50,7 @@ public class SecurityServiceTest {
     }
 
     //#2. If alarm is armed and a sensor becomes activated and the system is already pending alarm, set the alarm status to alarm.
-    /*@ParameterizedTest
+    @ParameterizedTest
     @EnumSource(value = ArmingStatus.class, names = {"ARMED_AWAY","ARMED_HOME"})
     @DisplayName("Tests Requirement #2")
     public void alarmArmed_and_sensorActivated_and_systemIsPendingAlarmStatus_setAlarmStatusToAlarm(ArmingStatus armingStatus) {
@@ -87,6 +87,7 @@ public class SecurityServiceTest {
     }
 
     //#5. If a sensor is activated while already active and the system is in pending state, change it to alarm state.
+    @Test
     @DisplayName("Tests Requirement #5")
     public void sensorActivated_whileAlreadyActive_and_systemPending_changeToAlarmState() {
         
@@ -97,6 +98,7 @@ public class SecurityServiceTest {
     }
 
     //#6. If a sensor is deactivated while already inactive, make no changes to the alarm state.
+    @ParameterizedTest
     @DisplayName("Tests Requirement #6")
     @EnumSource(AlarmStatus.class)
     public void sensorActivated_whileAlreadyActive_and_systemPending_changeToAlarmState(AlarmStatus alarmStatus) {
@@ -109,6 +111,7 @@ public class SecurityServiceTest {
     }
 
     //#7. If the image service identifies an image containing a cat while the system is armed-home, put the system into alarm status
+    @Test
     @DisplayName("Tests Requirement #7")
     public void identifiesAnImageACat_whileSystemArmedHome_putSystemIntoAlarm() {
 
@@ -118,6 +121,7 @@ public class SecurityServiceTest {
         verify(securityRepository).setAlarmStatus(AlarmStatus.ALARM);
     }
     //#8. If the image service identifies an image that does not contain a cat, change the status to no alarm as long as the sensors are not active.
+    @Test
     @DisplayName("Tests Requirement #8")
     public void identifiesAnImageACat_doesNotContainACat_changeStatusToNoAlarm_ifSensorsAreNotActive() {
         when(imageServiceTest.imageContainsCat(any(), ArgumentMatchers.anyFloat())).thenReturn(false);
@@ -127,6 +131,7 @@ public class SecurityServiceTest {
     }
 
     //#9. If the system is disarmed, set the status to no alarm.
+    @Test
     @DisplayName("Tests Requirement #9")
     public void systemDisarmed_setStatusNoAlarm() {
         securityRepository.setArmingStatus(ArmingStatus.DISARMED);
@@ -134,8 +139,9 @@ public class SecurityServiceTest {
     }
 
     //#10. If the system is armed, reset all sensors to inactive.
+    @Test
     @DisplayName("Tests Requirement #10")
     public void systemArmed_resetAllSensorsInactive() {
        // securityRepository.setArmingStatus(ArmingStatus.ARMED);
-    } */
+    }
 }
