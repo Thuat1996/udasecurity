@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
 
+
 /**
  * Service that receives information about changes to the security system. Responsible for
  * forwarding updates to the repository and making any decisions about changing the system state.
@@ -33,9 +34,15 @@ public class SecurityService {
      * @param armingStatus
      */
     public void setArmingStatus(ArmingStatus armingStatus) {
+        System.out.println("setArmingStatus");
+        System.out.println(armingStatus);
         if(armingStatus == ArmingStatus.DISARMED) {
             setAlarmStatus(AlarmStatus.NO_ALARM);
+        } else {
+            //sets all sensors inactive
+            securityRepository.getSensors().forEach(sensor -> sensor.setActive(false));
         }
+        System.out.println("out if else");
         securityRepository.setArmingStatus(armingStatus);
     }
 
@@ -45,7 +52,10 @@ public class SecurityService {
      * @param cat True if a cat is detected, otherwise false.
      */
     private void catDetected(Boolean cat) {
+       System.out.println("catdetected");
+        System.out.println(getArmingStatus());
         if(cat && getArmingStatus() == ArmingStatus.ARMED_HOME) {
+            //System.out.println(getArmingStatus());
             setAlarmStatus(AlarmStatus.ALARM);
         } else {
             setAlarmStatus(AlarmStatus.NO_ALARM);
@@ -104,10 +114,16 @@ public class SecurityService {
      * @param active
      */
     public void changeSensorActivationStatus(Sensor sensor, Boolean active) {
-        if(!sensor.getActive() && active) {
-            handleSensorActivated();
-        } else if (sensor.getActive() && !active) {
-            handleSensorDeactivated();
+        if (securityRepository.getAlarmStatus() != AlarmStatus.ALARM) {
+            if((!sensor.getActive() && active) || (sensor.getActive() && active) ) {
+                handleSensorActivated();
+            } else if (sensor.getActive() && !active) {
+                handleSensorDeactivated();
+            } else if (!sensor.getActive() && !active) {
+                return;
+            } else {
+                //nothing
+            }
         }
         sensor.setActive(active);
         securityRepository.updateSensor(sensor);
@@ -140,5 +156,9 @@ public class SecurityService {
 
     public ArmingStatus getArmingStatus() {
         return securityRepository.getArmingStatus();
+    }
+    //check if any sensor is active or not
+    public boolean areSensorsActive() {
+        return securityRepository.getSensors().stream().anyMatch(sensor -> sensor.getActive() == true);
     }
 }
