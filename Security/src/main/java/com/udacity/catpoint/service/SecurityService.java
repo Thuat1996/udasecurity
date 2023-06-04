@@ -22,7 +22,7 @@ public class SecurityService {
     private FakeImageService imageService;
     private SecurityRepository securityRepository;
     private Set<StatusListener> statusListeners = new HashSet<>();
-
+    private boolean _catDetected = false;
     public SecurityService(SecurityRepository securityRepository, FakeImageService imageService) {
         this.securityRepository = securityRepository;
         this.imageService = imageService;
@@ -34,15 +34,15 @@ public class SecurityService {
      * @param armingStatus
      */
     public void setArmingStatus(ArmingStatus armingStatus) {
-        System.out.println("setArmingStatus");
-        System.out.println(armingStatus);
         if(armingStatus == ArmingStatus.DISARMED) {
             setAlarmStatus(AlarmStatus.NO_ALARM);
         } else {
             //sets all sensors inactive
             securityRepository.getSensors().forEach(sensor -> sensor.setActive(false));
+            if (_catDetected) {
+                setAlarmStatus(AlarmStatus.ALARM);
+            }
         }
-        System.out.println("out if else");
         securityRepository.setArmingStatus(armingStatus);
     }
 
@@ -52,15 +52,12 @@ public class SecurityService {
      * @param cat True if a cat is detected, otherwise false.
      */
     private void catDetected(Boolean cat) {
-       System.out.println("catdetected");
-        System.out.println(getArmingStatus());
+        _catDetected = cat;
         if(cat && getArmingStatus() == ArmingStatus.ARMED_HOME) {
-            //System.out.println(getArmingStatus());
             setAlarmStatus(AlarmStatus.ALARM);
         } else {
             setAlarmStatus(AlarmStatus.NO_ALARM);
         }
-
         statusListeners.forEach(sl -> sl.catDetected(cat));
     }
 

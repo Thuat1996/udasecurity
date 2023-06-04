@@ -158,12 +158,10 @@ public class SecurityServiceTest {
     @Test
     @DisplayName("Tests Requirement #11")
     public void systemArmedHome_and_whileCameraShowsACat_setAlarmToAlarm() {
-        //when(securityRepository.getArmingStatus()).thenReturn(ArmingStatus.DISARMED);
         when(imageServiceTest.imageContainsCat(any(), ArgumentMatchers.anyFloat())).thenReturn(true);
         when(securityRepository.getArmingStatus()).thenReturn(ArmingStatus.DISARMED);
-       // securityService.processImage(img);
-        securityService.setArmingStatus(ArmingStatus.ARMED_HOME);
         securityService.processImage(img);
+        securityService.setArmingStatus(ArmingStatus.ARMED_HOME);
         verify(securityRepository).setAlarmStatus(AlarmStatus.ALARM);
     }
 }
