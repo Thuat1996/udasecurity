@@ -164,4 +164,13 @@ public class SecurityServiceTest {
         securityService.setArmingStatus(ArmingStatus.ARMED_HOME);
         verify(securityRepository).setAlarmStatus(AlarmStatus.ALARM);
     }
+    //#12. if system is disarmed and Alarm status is set to Alarm, go to change pending armed (fix coveriy)
+    @Test
+    @DisplayName("Tests Requirement #3")
+    public void systemDisarmed_and_alarmed_setAlarmStatusToPendingAlarm() {
+        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.ALARM);
+        when(securityRepository.getArmingStatus()).thenReturn(ArmingStatus.DISARMED);
+        securityService.changeSensorActivationStatus(sensor_door, false);
+        verify(securityRepository).setAlarmStatus(AlarmStatus.PENDING_ALARM);
+    }
 }

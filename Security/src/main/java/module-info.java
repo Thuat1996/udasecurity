@@ -6,5 +6,5 @@ module com.udacity.catpoint {
     requires java.prefs;
     requires com.google.common;
     opens com.udacity.catpoint.data to com.google.gson;
-    opens com.udacity.catpoint.service;
+    exports com.udacity.catpoint.service;
 }

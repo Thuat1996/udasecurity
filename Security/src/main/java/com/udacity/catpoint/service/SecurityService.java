@@ -55,7 +55,7 @@ public class SecurityService {
         _catDetected = cat;
         if(cat && getArmingStatus() == ArmingStatus.ARMED_HOME) {
             setAlarmStatus(AlarmStatus.ALARM);
-        } else {
+        } else if (!cat && !areSensorsActive()){
             setAlarmStatus(AlarmStatus.NO_ALARM);
         }
         statusListeners.forEach(sl -> sl.catDetected(cat));
@@ -121,6 +121,9 @@ public class SecurityService {
             } else {
                 //nothing
             }
+        } else if(securityRepository.getArmingStatus() == ArmingStatus.DISARMED &&
+            securityRepository.getAlarmStatus() == AlarmStatus.ALARM) {
+            handleSensorDeactivated();
         }
         sensor.setActive(active);
         securityRepository.updateSensor(sensor);
